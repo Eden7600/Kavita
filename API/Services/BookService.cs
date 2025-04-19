@@ -501,7 +501,7 @@ public class BookService : IBookService
                 Day = day,
                 Year = year,
                 Title = epubBook.Title,
-                Genre = string.Join(",",
+                Tags = string.Join(",",
                     epubBook.Schema.Package.Metadata.Subjects.Select(s => s.Subject.ToLower().Trim())),
                 LanguageISO = ValidateLanguage(epubBook.Schema.Package.Metadata.Languages
                     .Select(l => l.Language)
@@ -562,6 +562,11 @@ public class BookService : IBookService
                         break;
                     case "calibre:series_index":
                         info.Volume = metadataItem.Content;
+                        break;
+                    case "fanfic:fandom":
+                        info.Genre = string.IsNullOrEmpty(info.Genre)
+                            ? metadataItem.Content
+                            : info.Genre + "," + metadataItem.Content;
                         break;
                 }
 
